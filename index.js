@@ -140,58 +140,6 @@ function endGame() {
 
 
 
-/*
-
-//bg
-
-var background = new Image();
-background.src = "./img/bg.jpg"; 
-var bgSpeed = 0.2;
-
-var bgX = 0;
-
-function draw() {
-    // Muovi lo sfondo
-    bgX -= bgSpeed;
-
-    // Riposiziona lo sfondo se è uscito dal canvas
-    if (bgX < -background.width) {
-        bgX = 0;
-    }
-
-    // Disegna lo sfondo
-    c.drawImage(background, bgX, 0);
-
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    c.drawImage(background, bgX, 0, canvas.width, canvas.height);
-
-
-    requestAnimationFrame(draw); // Chiamata ricorsiva per l'animazione
-}
-
-
-background.onload = function () {
-    draw();
-};
-
-*/
-
-
-//bg
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function animate() {
