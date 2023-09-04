@@ -22,6 +22,7 @@ let invaderProjectiles = []
 let particles = []
 let bombs = []
 let powerUps = []
+let enemyType = 0;
 
 let keys = {
   a: {
@@ -40,6 +41,9 @@ let keys = {
     pressed: false
   },
   ctrl: {
+    pressed: false
+  },
+  mouseLeft: {
     pressed: false
   }
 }
@@ -83,6 +87,9 @@ function init() {
       pressed: false
     },
     ctrl: {
+      pressed: false
+    },
+    mouseLeft: {
       pressed: false
     }
   }
@@ -431,16 +438,21 @@ function animate() {
   }
 
   // spawning enemies
+  
   if (frames % randomInterval === 0) {
     spawnBuffer = spawnBuffer < 0 ? 100 : spawnBuffer
-    grids.push(new Grid())
+    enemyType++;
+    grids.push(new Grid(enemyType))
+    if(enemyType>=3){
+      enemyType=0;
+    }
     randomInterval = Math.floor(Math.random() * 500 + spawnBuffer)
     frames = 0
     spawnBuffer -= 100
   }
 
   if (
-    keys.space.pressed &&
+    (keys.space.pressed || keys.mouseLeft.pressed) &&
     player.powerUp === 'MachineGun' &&
     frames % 2 === 0 &&
     !game.over
@@ -468,10 +480,19 @@ document.querySelector('#startButton').addEventListener('click', () => {
   audio.backgroundMusic.play()
   audio.start.play()
 
-  document.querySelector('#startScreen').style.display = 'none'
-  document.querySelector('#scoreContainer').style.display = 'block'
-  init()
-  animate()
+  const starshipStartScreenContainer = document.getElementById("starshipStartScreenContainer");
+    starshipStartScreenContainer.classList.add("takeOff");
+    const startButton = document.getElementById("startButton");
+    startButton.style.display = "none";
+    const startButton2 = document.getElementById("startButton2");
+    startButton2.style.display = "block";
+
+    setTimeout(function() {
+      document.querySelector('#startScreen').style.display = 'none'
+      document.querySelector('#scoreContainer').style.display = 'block'
+      init()
+      animate()
+    }, 2000);
 })
 
 document.querySelector('#restartButton').addEventListener('click', () => {
@@ -480,6 +501,24 @@ document.querySelector('#restartButton').addEventListener('click', () => {
   init()
   animate()
 })
+
+function shoot(){
+  if (player.powerUp === 'MachineGun') return
+
+  audio.shoot.play()
+  projectiles.push(
+    new Projectile({
+      position: {
+        x: player.position.x + player.width / 2,
+        y: player.position.y
+      },
+      velocity: {
+        x: 0,
+        y: -10
+      }
+    })
+  )
+}
 
 addEventListener('keydown', ({ key }) => {
   if (game.over) return
@@ -498,26 +537,11 @@ addEventListener('keydown', ({ key }) => {
       keys.ArrowLeft.pressed = true
       break
     case ' ':
-      keys.space.pressed = true
-
-      if (player.powerUp === 'MachineGun') return
-
-      audio.shoot.play()
-      projectiles.push(
-        new Projectile({
-          position: {
-            x: player.position.x + player.width / 2,
-            y: player.position.y
-          },
-          velocity: {
-            x: 0,
-            y: -10
-          }
-        })
-      )
-
-      break
-  }
+        keys.space.pressed = true 
+        shoot();
+        break
+        
+    }
 })
 
 addEventListener('keyup', ({ key }) => {
@@ -536,7 +560,22 @@ addEventListener('keyup', ({ key }) => {
       break
     case ' ':
       keys.space.pressed = false
-
       break
   }
 })
+
+function handleMouseDown(event) {
+  if (event.button === 0) {
+    keys.space.pressed = true;
+    shoot();
+  }
+}
+
+function handleMouseUp(event) {
+  if (event.button === 0) {
+    keys.space.pressed = false;
+  }
+}
+
+document.addEventListener("mousedown", handleMouseDown);
+document.addEventListener("mouseup", handleMouseUp);

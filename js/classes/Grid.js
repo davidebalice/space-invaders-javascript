@@ -1,10 +1,10 @@
 class Grid {
-  constructor() {
+  constructor(type) {
     this.position = {
       x: 0,
       y: 0
     }
-
+    this.type = type
     this.velocity = {
       x: 3,
       y: 0
@@ -24,7 +24,8 @@ class Grid {
             position: {
               x: x * 30,
               y: y * 30
-            }
+            },
+            type
           })
         )
       }

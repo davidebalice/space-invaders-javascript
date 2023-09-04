@@ -5,8 +5,22 @@ class Bomb {
     this.velocity = velocity
     this.radius = 0
     this.color = 'red'
-    this.opacity = 1
+    this.opacity = 0.1
     this.active = false
+
+    const image = new Image()
+    image.src = `./img/bomb.png`
+    image.onload = () => {
+      const scale = 1.6
+      this.image = image
+      this.width = image.width * scale
+      this.height = image.height * scale
+      this.position = {
+        x: position.x,
+        y: position.y
+      }
+    }
+
 
     gsap.to(this, {
       radius: 30
@@ -22,6 +36,13 @@ class Bomb {
     c.fillStyle = this.color
     c.fill()
     c.restore()
+    c.drawImage(
+      this.image,
+      this.position.x-25,
+      this.position.y-31,
+      this.width,
+      this.height
+    )
   }
 
   update() {

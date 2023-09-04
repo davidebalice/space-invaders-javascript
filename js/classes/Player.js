@@ -108,7 +108,6 @@ class Player {
       } else {
         this.currentFireImageIndex = 0
       }
-      console.log(this.currentFireImageIndex)
       this.fire.src = this.fireImages[this.currentFireImageIndex]
     }
   }

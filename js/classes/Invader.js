@@ -1,12 +1,12 @@
 class Invader {
-  constructor({ position }) {
+  constructor({ position, type }) {
     this.velocity = {
       x: 0,
       y: 0
     }
-
+    this.type = type;
     const image = new Image()
-    image.src = './img/invader.png'
+    image.src = `./img/enemy${type}.png`
     image.onload = () => {
       const scale = 1
       this.image = image
@@ -20,9 +20,6 @@ class Invader {
   }
 
   draw() {
-    // c.fillStyle = 'red'
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-
     c.drawImage(
       this.image,
       this.position.x,
