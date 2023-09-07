@@ -4,7 +4,7 @@ class Player {
       x: 0,
       y: 0
     }
-
+    this.radius = 15
     this.rotation = 0
     this.opacity = 1
 
@@ -80,26 +80,6 @@ class Player {
 
     if (this.opacity !== 1) return
 
-    /*
-    this.frames++
-    if (this.frames % 2 === 0) {
-      this.particles.push(
-        new Particle({
-          position: {
-            x: this.position.x + this.width / 2,
-            y: this.position.y + this.height
-          },
-          velocity: {
-            x: (Math.random() - 0.5) * 1.5,
-            y: 1.4
-          },
-          radius: Math.random() * 2,
-          color: 'white',
-          fades: true
-        })
-      )
-    }
-*/
     this.fireFrame++
     if (this.fireFrame >= this.fireAnimationFrameDuration) {
       this.fireFrame = 0

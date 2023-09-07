@@ -6,12 +6,6 @@ const c = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
-//mobile
-/*
-canvas.width = 576
-canvas.height = 1024
-*/
-
 canvas.width = window.innerWidth - 20
 canvas.height = window.innerHeight - 20
 
@@ -22,7 +16,8 @@ let invaderProjectiles = []
 let particles = []
 let bombs = []
 let powerUps = []
-let enemyType = 0;
+let enemyType = 0
+let gameOver = false
 
 let keys = {
   a: {
@@ -145,10 +140,6 @@ function endGame() {
   })
 }
 
-
-
-
-
 function animate() {
   if (!game.active) return
   requestAnimationFrame(animate)
@@ -164,8 +155,7 @@ function animate() {
   c.fillStyle = 'rgba(0, 0, 0, 0)'
   c.fillRect(0, 0, canvas.width, canvas.height)
 
-  c.clearRect(0, 0, canvas.width, canvas.height);
-
+  c.clearRect(0, 0, canvas.width, canvas.height)
 
   for (let i = powerUps.length - 1; i >= 0; i--) {
     const powerUp = powerUps[i]
@@ -311,6 +301,43 @@ function animate() {
       projectile.update()
     }
   }
+  /*
+  for (let j = bombs.length - 1; j >= 0; j--) {
+    const bomb = bombs[j]
+    
+    if (bomb && !gameOver) {
+      if (
+        rectangularCollision({
+          rectangle1: bomb,
+          rectangle2: player
+        })
+      ) {
+        bomb.explode()
+        endGame()
+        gameOver = true
+      }
+    }
+  }
+*/
+
+  for (let j = bombs.length - 1; j >= 0; j--) {
+    const bomb = bombs[j]
+
+    if (bomb && !gameOver) {
+      if (
+        Math.hypot(
+          player.position.x - bomb.position.x,
+          player.position.y - bomb.position.y
+        ) <
+          player.radius + bomb.radius &&
+        !bomb.active
+      ) {
+        bomb.explode()
+        endGame()
+        gameOver = true
+      }
+    }
+  }
 
   grids.forEach((grid, gridIndex) => {
     grid.update()
@@ -438,13 +465,13 @@ function animate() {
   }
 
   // spawning enemies
-  
+
   if (frames % randomInterval === 0) {
     spawnBuffer = spawnBuffer < 0 ? 100 : spawnBuffer
-    enemyType++;
+    enemyType++
     grids.push(new Grid(enemyType))
-    if(enemyType>=3){
-      enemyType=0;
+    if (enemyType >= 3) {
+      enemyType = 0
     }
     randomInterval = Math.floor(Math.random() * 500 + spawnBuffer)
     frames = 0
@@ -480,29 +507,32 @@ document.querySelector('#startButton').addEventListener('click', () => {
   audio.backgroundMusic.play()
   audio.start.play()
 
-  const starshipStartScreenContainer = document.getElementById("starshipStartScreenContainer");
-    starshipStartScreenContainer.classList.add("takeOff");
-    const startButton = document.getElementById("startButton");
-    startButton.style.display = "none";
-    const startButton2 = document.getElementById("startButton2");
-    startButton2.style.display = "block";
+  const starshipStartScreenContainer = document.getElementById(
+    'starshipStartScreenContainer'
+  )
+  starshipStartScreenContainer.classList.add('takeOff')
+  const startButton = document.getElementById('startButton')
+  startButton.style.display = 'none'
+  const startButton2 = document.getElementById('startButton2')
+  startButton2.style.display = 'block'
 
-    setTimeout(function() {
-      document.querySelector('#startScreen').style.display = 'none'
-      document.querySelector('#scoreContainer').style.display = 'block'
-      init()
-      animate()
-    }, 2000);
+  setTimeout(function () {
+    document.querySelector('#startScreen').style.display = 'none'
+    document.querySelector('#scoreContainer').style.display = 'block'
+    init()
+    animate()
+  }, 2000)
 })
 
 document.querySelector('#restartButton').addEventListener('click', () => {
   audio.select.play()
   document.querySelector('#restartScreen').style.display = 'none'
+  gameOver = false
   init()
   animate()
 })
 
-function shoot(){
+function shoot() {
   if (player.powerUp === 'MachineGun') return
 
   audio.shoot.play()
@@ -537,11 +567,10 @@ addEventListener('keydown', ({ key }) => {
       keys.ArrowLeft.pressed = true
       break
     case ' ':
-        keys.space.pressed = true 
-        shoot();
-        break
-        
-    }
+      keys.space.pressed = true
+      shoot()
+      break
+  }
 })
 
 addEventListener('keyup', ({ key }) => {
@@ -566,16 +595,16 @@ addEventListener('keyup', ({ key }) => {
 
 function handleMouseDown(event) {
   if (event.button === 0) {
-    keys.space.pressed = true;
-    shoot();
+    keys.space.pressed = true
+    shoot()
   }
 }
 
 function handleMouseUp(event) {
   if (event.button === 0) {
-    keys.space.pressed = false;
+    keys.space.pressed = false
   }
 }
 
-document.addEventListener("mousedown", handleMouseDown);
-document.addEventListener("mouseup", handleMouseUp);
+document.addEventListener('mousedown', handleMouseDown)
+document.addEventListener('mouseup', handleMouseUp)

@@ -1,5 +1,5 @@
 class Bomb {
-  static radius = 30
+  static radius = 26
   constructor({ position, velocity }) {
     this.position = position
     this.velocity = velocity
@@ -21,7 +21,6 @@ class Bomb {
       }
     }
 
-
     gsap.to(this, {
       radius: 30
     })
@@ -38,8 +37,8 @@ class Bomb {
     c.restore()
     c.drawImage(
       this.image,
-      this.position.x-25,
-      this.position.y-31,
+      this.position.x - 25,
+      this.position.y - 31,
       this.width,
       this.height
     )
