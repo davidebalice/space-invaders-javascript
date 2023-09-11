@@ -4,7 +4,7 @@ class Player {
       x: 0,
       y: 0
     }
-    this.radius = 15
+    this.radius = 18
     this.rotation = 0
     this.opacity = 1
 
@@ -40,6 +40,7 @@ class Player {
   draw() {
     c.save()
     c.globalAlpha = this.opacity
+
     c.translate(
       player.position.x + player.width / 2,
       player.position.y + player.height / 2 - 4
@@ -60,7 +61,6 @@ class Player {
     )
 
     if (this.fire) {
-      // Draw the fire image, adjust offsets if needed
       c.drawImage(
         this.fire,
         this.position.x,

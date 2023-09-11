@@ -301,16 +301,19 @@ function animate() {
       projectile.update()
     }
   }
+
   /*
   for (let j = bombs.length - 1; j >= 0; j--) {
     const bomb = bombs[j]
-    
+
     if (bomb && !gameOver) {
       if (
-        rectangularCollision({
-          rectangle1: bomb,
-          rectangle2: player
-        })
+        Math.hypot(
+          player.position.x - bomb.position.x,
+          player.position.y - bomb.position.y
+        ) <
+          player.radius + bomb.radius &&
+        !bomb.active
       ) {
         bomb.explode()
         endGame()
@@ -325,11 +328,10 @@ function animate() {
 
     if (bomb && !gameOver) {
       if (
-        Math.hypot(
-          player.position.x - bomb.position.x,
-          player.position.y - bomb.position.y
-        ) <
-          player.radius + bomb.radius &&
+        player.position.x < bomb.position.x + bomb.width - 20 &&
+        player.position.x + player.width > bomb.position.x &&
+        player.position.y < bomb.position.y + bomb.height - 20 &&
+        player.position.y + player.height > bomb.position.y &&
         !bomb.active
       ) {
         bomb.explode()
