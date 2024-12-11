@@ -19,6 +19,7 @@ let bombs = []
 let powerUps = []
 let enemyType = 0
 let gameOver = false
+let startGame = false
 let volume = true
 
 let keys = {
@@ -122,6 +123,7 @@ function init() {
 function endGame() {
   console.log('you lose')
   audio.gameOver.play()
+  startGame = false
 
   // Makes player disappear
   setTimeout(() => {
@@ -302,27 +304,6 @@ function animate() {
       projectile.update()
     }
   }
-
-  /*
-  for (let j = bombs.length - 1; j >= 0; j--) {
-    const bomb = bombs[j]
-
-    if (bomb && !gameOver) {
-      if (
-        Math.hypot(
-          player.position.x - bomb.position.x,
-          player.position.y - bomb.position.y
-        ) <
-          player.radius + bomb.radius &&
-        !bomb.active
-      ) {
-        bomb.explode()
-        endGame()
-        gameOver = true
-      }
-    }
-  }
-*/
 
   for (let j = bombs.length - 1; j >= 0; j--) {
     const bomb = bombs[j]
@@ -521,6 +502,9 @@ document.querySelector('#volumeButton').addEventListener('click', () => {
 document.querySelector('#startButton').addEventListener('click', () => {
   audio.backgroundMusic.play()
   audio.start.play()
+  setTimeout(() => {
+    startGame = true
+  }, 2000)
 
   const starshipStartScreenContainer = document.getElementById(
     'starshipStartScreenContainer'
@@ -543,6 +527,7 @@ document.querySelector('#restartButton').addEventListener('click', () => {
   audio.select.play()
   document.querySelector('#restartScreen').style.display = 'none'
   gameOver = false
+  startGame = true
   init()
   animate()
 })
@@ -583,7 +568,9 @@ addEventListener('keydown', ({ key }) => {
       break
     case ' ':
       keys.space.pressed = true
-      shoot()
+      if (startGame) {
+        shoot()
+      }
       break
   }
 })
@@ -611,7 +598,9 @@ addEventListener('keyup', ({ key }) => {
 function handleMouseDown(event) {
   if (event.button === 0) {
     keys.space.pressed = true
-    shoot()
+    if (startGame) {
+      shoot()
+    }
   }
 }
 
