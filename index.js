@@ -1,4 +1,5 @@
 const scoreEl = document.querySelector('#scoreEl')
+const volumeStop = document.querySelector('#volumeStop')
 const canvas = document.querySelector('canvas')
 const canvasContainer = document.getElementById('body')
 const c = canvas.getContext('2d')
@@ -18,6 +19,7 @@ let bombs = []
 let powerUps = []
 let enemyType = 0
 let gameOver = false
+let volume = true
 
 let keys = {
   a: {
@@ -151,7 +153,6 @@ function animate() {
 
   msPrev = msNow - (elapsed % fpsInterval) // 3.34
 
-  //c.fillStyle = 'black'
   c.fillStyle = 'rgba(0, 0, 0, 0)'
   c.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -166,7 +167,7 @@ function animate() {
   }
 
   // spawn powerups
-  if (frames % 500 === 0) {
+  if (frames > 100 && frames % 500 === 0) {
     powerUps.push(
       new PowerUp({
         position: {
@@ -504,6 +505,18 @@ function animate() {
 
   frames++
 }
+
+document.querySelector('#volumeButton').addEventListener('click', () => {
+  if (volume) {
+    Howler.volume(0)
+    volume = false
+    volumeStop.style.display = 'block'
+  } else {
+    Howler.volume(0.6)
+    volume = true
+    volumeStop.style.display = 'none'
+  }
+})
 
 document.querySelector('#startButton').addEventListener('click', () => {
   audio.backgroundMusic.play()

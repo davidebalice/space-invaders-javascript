@@ -14,10 +14,13 @@ body {
   position: absolute;
   z-index: 10;
   color: white;
-  left: 10px;
-  top: 10px;
+  font-size: 17px;
+  left: 14px;
+  top: 14px;
   margin: 0;
   display: none;
+  pointer-events: none;
+  user-select: none;
 }
 
 #startScreen {
@@ -103,18 +106,27 @@ body {
   cursor: pointer;
   position: relative;
   display: inline-block;
+  transition: transform 0.3s;
 }
 
 #startButton2 {
   cursor: pointer;
   position: relative;
   display: none;
+  transition: transform 0.3s;
+}
+
+#startButton:hover,
+#startButton2:hover,
+#restartButton:hover {
+  transform: scale(1.1);
 }
 
 #textStart {
   position: absolute;
-  color: white;
-  top: 50%;
+  font-weight: bold;
+  color: #222;
+  top: 46%;
   transform: translate(-50%, -50%);
   left: 50%;
 }
@@ -158,8 +170,9 @@ canvas {
 
 #restartText {
   position: absolute;
-  color: white;
-  top: 50%;
+  color: #222;
+  font-weight: bold;
+  top: 46%;
   transform: translate(-50%, -50%);
   left: 50%;
 }
@@ -168,6 +181,7 @@ canvas {
   cursor: pointer;
   position: relative;
   display: inline-block;
+  transition: transform 0.3s;
 }
 
 #gameOverText {
@@ -184,4 +198,42 @@ canvas {
 #pointsText {
   color: white;
   margin-top: 0;
+}
+
+#buttonsContainer {
+  display: flex;
+  position: fixed;
+  right: 20px;
+  gap: 5px;
+  top: 20px;
+  z-index: 100;
+}
+
+#volumeButton,
+#githubButton {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+#volumeButton img,
+#githubButton img {
+  width: 100%;
+}
+
+#volumeButton:hover,
+#githubButton:hover {
+  transform: scale(1.1);
+}
+
+#volumeStop {
+  pointer-events: none;
+  position: absolute;
+  margin-top: 16px;
+  width: 42px;
+  height: 6px;
+  rotate: 40deg;
+  background-color: red;
+  display: none;
 }

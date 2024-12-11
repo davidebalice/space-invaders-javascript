@@ -5,6 +5,8 @@ class Projectile {
 
     this.radius = 4
     this.color = color
+    this.width = 6
+    this.height = 14
   }
 
   draw() {

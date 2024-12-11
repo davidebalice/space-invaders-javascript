@@ -1,7 +1,7 @@
-Howler.volume(0.5)
+Howler.volume(0.6)
 const audio = {
   backgroundMusic: new Howl({
-    src: './audio/backgroundMusic.wav',
+    src: './audio/PixelatedDreams.mp3',
     loop: true
   }),
   bomb: new Howl({
@@ -18,7 +18,7 @@ const audio = {
     src: './audio/explode.wav'
   }),
   gameOver: new Howl({
-    src: './audio/gameOver.mp3'
+    src: './audio/bomb.mp3'
   }),
   select: new Howl({
     src: './audio/select.mp3'
