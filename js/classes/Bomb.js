@@ -49,6 +49,7 @@ class Bomb {
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
+    // Cambia direzione quando la bomba raggiunge i bordi del canvas
     if (
       this.position.x + this.radius + this.velocity.x >= canvas.width ||
       this.position.x - this.radius + this.velocity.x <= 0

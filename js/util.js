@@ -1,7 +1,9 @@
+// Genera un numero casuale tra min e max
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min
 }
 
+// Crea un'etichetta del punteggio
 function createScoreLabel({ score = 100, object }) {
   const scoreLabel = document.createElement('label')
   scoreLabel.innerHTML = score
@@ -22,6 +24,7 @@ function createScoreLabel({ score = 100, object }) {
   })
 }
 
+// Controlla la collisione tra due rettangoli
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
     rectangle1.position.y + rectangle1.height >= rectangle2.position.y &&
@@ -30,6 +33,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   )
 }
 
+// Crea particelle
 function createParticles({ object, color, fades }) {
   for (let i = 0; i < 15; i++) {
     particles.push(

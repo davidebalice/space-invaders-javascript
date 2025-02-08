@@ -1,15 +1,18 @@
+// Seleziona gli elementi dal DOM
 const scoreEl = document.querySelector('#scoreEl')
 const volumeStop = document.querySelector('#volumeStop')
 const canvas = document.querySelector('canvas')
 const canvasContainer = document.getElementById('body')
 const c = canvas.getContext('2d')
 
+// Imposta le dimensioni del canvas
 canvas.width = 1024
 canvas.height = 576
 
 canvas.width = window.innerWidth - 20
 canvas.height = window.innerHeight - 20
 
+// Inizializza le variabili di gioco
 let player = new Player()
 let projectiles = []
 let grids = []
@@ -22,6 +25,7 @@ let gameOver = false
 let startGame = false
 let volume = true
 
+// Inizializza lo stato dei tasti
 let keys = {
   a: {
     pressed: false
@@ -46,6 +50,7 @@ let keys = {
   }
 }
 
+// Inizializza altre variabili di gioco
 let frames = 0
 let randomInterval = Math.floor(Math.random() * 500 + 500)
 let game = {
@@ -59,6 +64,7 @@ let fps = 60
 let fpsInterval = 1000 / fps
 let msPrev = window.performance.now()
 
+// Funzione per inizializzare il gioco
 function init() {
   player = new Player()
   projectiles = []
@@ -102,6 +108,7 @@ function init() {
   document.querySelector('#finalScore').innerHTML = score
   document.querySelector('#scoreEl').innerHTML = score
 
+  // Crea particelle iniziali
   for (let i = 0; i < 100; i++) {
     particles.push(
       new Particle({
@@ -184,7 +191,7 @@ function animate() {
     )
   }
 
-  // spawn bombs
+  // spawn bombe
   if (frames % 200 === 0 && bombs.length < 3) {
     bombs.push(
       new Bomb({
@@ -260,7 +267,7 @@ function animate() {
     for (let j = bombs.length - 1; j >= 0; j--) {
       const bomb = bombs[j]
 
-      // if projectile touches bomb, remove projectile
+      // se projectile tocca bomba, rimuovi proiettile
       if (
         Math.hypot(
           projectile.position.x - bomb.position.x,
@@ -277,7 +284,7 @@ function animate() {
     for (let j = powerUps.length - 1; j >= 0; j--) {
       const powerUp = powerUps[j]
 
-      // if projectile touches bomb, remove projectile
+      // se projectile tocca bomba, rimuovi proiettile
       if (
         Math.hypot(
           projectile.position.x - powerUp.position.x,
@@ -326,7 +333,7 @@ function animate() {
   grids.forEach((grid, gridIndex) => {
     grid.update()
 
-    // spawn projectiles
+    // spawn proiettili
     if (frames % 100 === 0 && grid.invaders.length > 0) {
       grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(
         invaderProjectiles
@@ -342,7 +349,7 @@ function animate() {
 
         const invaderRadius = 15
 
-        // if bomb touches invader, remove invader
+        // se bomba tocca invader, rimuovi invader
         if (
           Math.hypot(
             invader.position.x - bomb.position.x,
@@ -385,12 +392,12 @@ function animate() {
               (projectile2) => projectile2 === projectile
             )
 
-            // remove invader and projectile
+            // rimuovi invader e proiettile
             if (invaderFound && projectileFound) {
               score += 100
               scoreEl.innerHTML = score
 
-              // dynamic score labels
+              //score labels
               createScoreLabel({
                 object: invader
               })
@@ -400,7 +407,7 @@ function animate() {
                 fades: true
               })
 
-              // singular projectile hits an enemy
+              //proiettile colpisce invader
               audio.explode.play()
               grid.invaders.splice(i, 1)
               projectiles.splice(j, 1)
@@ -422,7 +429,7 @@ function animate() {
         }
       })
 
-      // remove player if invaders touch it
+      //gameover - rimuovi player se viene toccato da invader
       if (
         rectangularCollision({
           rectangle1: invader,
@@ -431,7 +438,7 @@ function animate() {
         !game.over
       )
         endGame()
-    } // end looping over grid.invaders
+    } // end loop della griglia
   })
 
   if ((keys.a.pressed || keys.ArrowLeft.pressed) && player.position.x >= 0) {
@@ -598,6 +605,7 @@ addEventListener('keyup', ({ key }) => {
 function handleMouseDown(event) {
   if (event.button === 0) {
     keys.space.pressed = true
+    // Se il gioco è iniziato, spara
     if (startGame) {
       shoot()
     }
@@ -610,5 +618,56 @@ function handleMouseUp(event) {
   }
 }
 
+// Aggiungi listener per il mouse
 document.addEventListener('mousedown', handleMouseDown)
 document.addEventListener('mouseup', handleMouseUp)
+
+// Quando il mouse si muove
+let lastMouseX = 0 // Memorizza l'ultima posizione X del mouse
+
+window.addEventListener('mousemove', (event) => {
+  // Controlla la direzione del movimento
+  if (event.clientX < lastMouseX) {
+    player.rotation = -0.15 // Rotazione a sinistra
+  } else if (event.clientX > lastMouseX) {
+    player.rotation = 0.15 // Rotazione a destra
+  }
+
+  // Sposta il player solo orizzontalmente
+  player.position.x = event.clientX - player.width / 2
+  lastMouseX = event.clientX // Aggiorna la posizione del mouse
+})
+
+// Resetta la rotazione quando il mouse smette di muoversi
+window.addEventListener('mouseleave', () => {
+  player.rotation = 0
+})
+
+// Movimento con touch
+let lastTouchX = 0 // Memorizza l'ultima posizione X del tocco
+
+canvas.addEventListener('touchstart', (event) => {
+  const touch = event.touches[0]
+  player.position.x = touch.clientX - player.width / 2
+  lastTouchX = touch.clientX // Memorizza la posizione iniziale del tocco
+})
+
+canvas.addEventListener('touchmove', (event) => {
+  const touch = event.touches[0]
+
+  // Controlla la direzione del movimento
+  if (touch.clientX < lastTouchX) {
+    player.rotation = -0.15 // Rotazione a sinistra
+  } else if (touch.clientX > lastTouchX) {
+    player.rotation = 0.15 // Rotazione a destra
+  }
+
+  // Sposta il player solo orizzontalmente
+  player.position.x = touch.clientX - player.width / 2
+  lastTouchX = touch.clientX // Aggiorna la posizione del tocco
+})
+
+// Resetta la rotazione quando il tocco finisce
+canvas.addEventListener('touchend', () => {
+  player.rotation = 0
+})

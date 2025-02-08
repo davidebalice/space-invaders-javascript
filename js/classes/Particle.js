@@ -25,6 +25,7 @@ class Particle {
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
+    // Riduce l'opacità se fades è true
     if (this.fades) this.opacity -= 0.01
   }
 }

@@ -4,7 +4,7 @@ class Invader {
       x: 0,
       y: 0
     }
-    this.type = type;
+    this.type = type
     const image = new Image()
     image.src = `./img/enemy${type}.png`
     image.onload = () => {
@@ -19,6 +19,7 @@ class Invader {
     }
   }
 
+  // Disegna l'invasore
   draw() {
     c.drawImage(
       this.image,
@@ -29,6 +30,7 @@ class Invader {
     )
   }
 
+  // Aggiorna la posizione dell'invasore
   update({ velocity }) {
     if (this.image) {
       this.draw()
@@ -37,6 +39,7 @@ class Invader {
     }
   }
 
+  // L'invasore spara un proiettile
   shoot(invaderProjectiles) {
     audio.enemyShoot.play()
     invaderProjectiles.push(
